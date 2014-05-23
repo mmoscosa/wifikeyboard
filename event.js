@@ -24,16 +24,34 @@ $(function() {
 	  });
 	}
 
+
+	//Check if URL Exists
+    // @Params: URL to check
+    // @Return if exists then set cookie and reload page
+    // @Return if it DOES NOT exists then delete cookie and reload page
+    function checkCookie(url, callback){
+	  $.ajax({
+	    type: 'HEAD',
+	    url: url,
+	    success: function(){
+	    	placeholder.replaceWith('Waiting…');
+	    },
+	    error: function() {
+	    	monster.remove('wifiKeyboardURL');
+	    }
+	  });
+	}
+
 	function loadWifiKeyboard () {
 		if(monster.get('wifiKeyboardURL')){
 			//ToDO Check if URL in cookie is still valid 
-			
+			checkCookie(monster.get('wifiKeyboardURL'));
 			//else load iframe
 			url.val(monster.get('wifiKeyboardURL'));
 			submit.attr('value', 'Change');
 	    	placeholder.replaceWith('<div style="border: 1px solid red; width: 400px; height: 325px; overflow: hidden;"><iframe scrolling="no" style="width: 800px; height: 600px; margin-top: -250px; margin-left: -20px;" src="'+monster.get('wifiKeyboardURL')+'" width="800" height="600" border="0"></iframe></div>');
 		}else{
-			placeholder.replaceWith('error');
+			placeholder.replaceWith('There is not a valid URL Address, try again');
 		}
 	}
 	
